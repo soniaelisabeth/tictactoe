@@ -3,7 +3,7 @@ from math import inf
 
 HUMANO = -1
 BOT = +1
-board = [
+tabuleiro = [
     [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0]]
@@ -52,7 +52,7 @@ def celulas_vazias(state):
 
 
 def jogada_valida(x, y):
-    if [x, y] in celulas_vazias(board):
+    if [x, y] in celulas_vazias(tabuleiro):
         return True
     else:
         return False
@@ -60,13 +60,12 @@ def jogada_valida(x, y):
 
 def jogada(x, y, player):
     if jogada_valida(x, y):
-        board[x][y] = player
+        tabuleiro[x][y] = player
         return True
     else:
         return False
 
-
-def mostra_board(state, bot_escolha, humano_escolha):
+def mostra_tabuleiro(state, bot_escolha, humano_escolha):
     chars = {
         -1: humano_escolha,
         +1: bot_escolha,
@@ -83,8 +82,8 @@ def mostra_board(state, bot_escolha, humano_escolha):
 
 def vez_bot(bot_escolha, humano_escolha, dificuldade):
     level_profund = ''
-    profundidade = len(celulas_vazias(board))
-    if profundidade == 0 or game_over(board):
+    profundidade = len(celulas_vazias(tabuleiro))
+    if profundidade == 0 or game_over(tabuleiro):
         return
     
     print(f'Minha vez... [{bot_escolha}]')
@@ -98,7 +97,7 @@ def vez_bot(bot_escolha, humano_escolha, dificuldade):
         if dificuldade == '3': #quanto maior a profundidade, mais inteligente
             level_profund = 8
         new_profundidade = profundidade - level_profund
-        move = minimax(board, new_profundidade, BOT)
+        move = minimax(tabuleiro, new_profundidade, BOT)
         x, y = move[0], move[1]
 
     jogada(x, y, BOT)
@@ -131,8 +130,8 @@ def minimax(state, profundidade, player):
 
 
 def vez_humano(bot_escolha, humano_escolha):
-    profundidade = len(celulas_vazias(board))
-    if profundidade == 0 or game_over(board):
+    profundidade = len(celulas_vazias(tabuleiro))
+    if profundidade == 0 or game_over(tabuleiro):
         return
 
     move = -1
@@ -143,7 +142,7 @@ def vez_humano(bot_escolha, humano_escolha):
     }
 
     print(f'Sua vez: [{humano_escolha}]')
-    mostra_board(board, bot_escolha, humano_escolha)
+    mostra_tabuleiro(tabuleiro, bot_escolha, humano_escolha)
 
     while move < 1 or move > 9:
         try:
@@ -154,7 +153,7 @@ def vez_humano(bot_escolha, humano_escolha):
             if not can_move:
                 print('Movimento inválido D:')
                 move = -1
-        except (EOFError, KeyboardInterrupt):
+        except (EOFError, KeytabuleiroInterrupt):
             print('Byeeeeee')
             exit()
         except (KeyError, ValueError):
@@ -169,7 +168,7 @@ def main():
             print('')
             print('Bem vindo ao jogo da velha, professor Allan!')
             humano_escolha = input('Escolha X or O: ').upper()
-        except (EOFError, KeyboardInterrupt):
+        except (EOFError, KeytabuleiroInterrupt):
             print('Byeeeee')
             exit()
         except (KeyError, ValueError):
@@ -183,14 +182,14 @@ def main():
     while dificuldade != '1' and dificuldade != '2' and dificuldade != '3':
         try:
             dificuldade = input('Escolha sua dificuldade: \nFácil[1]\nMédio[2]\nDifícil[3]\n').upper()
-        except (EOFError, KeyboardInterrupt):
+        except (EOFError, KeytabuleiroInterrupt):
             print('Byeeeee')
             exit()
         except (KeyError, ValueError):
             print('Tente novamente!')
 
     primeiro_movimento = 'H'
-    while len(celulas_vazias(board)) > 0 and not game_over(board):
+    while len(celulas_vazias(tabuleiro)) > 0 and not game_over(tabuleiro):
         if primeiro_movimento:
             vez_bot(bot_escolha, humano_escolha, dificuldade)
             primeiro_movimento = ''
@@ -198,19 +197,19 @@ def main():
         vez_humano(bot_escolha, humano_escolha)
         vez_bot(bot_escolha, humano_escolha, dificuldade)
 
-    if wins(board, HUMANO):
+    if wins(tabuleiro, HUMANO):
 
         print(f'Sua vez[{humano_escolha}]')
-        mostra_board(board, bot_escolha, humano_escolha)
+        mostra_tabuleiro(tabuleiro, bot_escolha, humano_escolha)
         print('Você ganhou, aff...')
-    elif wins(board, BOT):
+    elif wins(tabuleiro, BOT):
 
         print(f'Minha vez! Deixe eu pensar... [{bot_escolha}]')
-        mostra_board(board, bot_escolha, humano_escolha)
+        mostra_tabuleiro(tabuleiro, bot_escolha, humano_escolha)
         print('Perdeste! Hahah')
     else:
 
-        mostra_board(board, bot_escolha, humano_escolha)
+        mostra_tabuleiro(tabuleiro, bot_escolha, humano_escolha)
         print('Ih, deu velha...')
 
     exit()
