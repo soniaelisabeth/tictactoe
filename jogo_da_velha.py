@@ -83,13 +83,13 @@ def mostra_board(state, bot_escolha, humano_escolha):
 
 def vez_bot(bot_escolha, humano_escolha, dificuldade):
     level_profund = ''
-    depth = len(celulas_vazias(board))
-    if depth == 0 or game_over(board):
+    profundidade = len(celulas_vazias(board))
+    if profundidade == 0 or game_over(board):
         return
     
     print(f'Minha vez... [{bot_escolha}]')
         
-    if depth == 9 or dificuldade == '1': 
+    if profundidade == 9 or dificuldade == '1': 
         x = choice([0, 1, 2]) #numero randomico
         y = choice([0, 1, 2])
     else:
@@ -97,26 +97,26 @@ def vez_bot(bot_escolha, humano_escolha, dificuldade):
             level_profund = 4
         if dificuldade == '3': #quanto maior a profundidade, mais inteligente
             level_profund = 8
-        new_depth = depth - level_profund
-        move = minimax(board, new_depth, BOT)
+        new_profundidade = profundidade - level_profund
+        move = minimax(board, new_profundidade, BOT)
         x, y = move[0], move[1]
 
     jogada(x, y, BOT)
 
-def minimax(state, depth, player):
+def minimax(state, profundidade, player):
     if player == BOT:
         best = [-1, -1, -inf]
     else:
         best = [-1, -1, +inf]
 
-    if depth == 0 or game_over(state):
+    if profundidade == 0 or game_over(state):
         score = avaliacao(state)
         return [-1, -1, score]
 
     for celula in celulas_vazias(state):
         x, y = celula[0], celula[1]
         state[x][y] = player
-        score = minimax(state, depth, -player) # diminuir profund
+        score = minimax(state, profundidade, -player) # diminuir profund
         state[x][y] = 0
         score[0], score[1] = x, y
 
@@ -131,11 +131,10 @@ def minimax(state, depth, player):
 
 
 def vez_humano(bot_escolha, humano_escolha):
-    depth = len(celulas_vazias(board))
-    if depth == 0 or game_over(board):
+    profundidade = len(celulas_vazias(board))
+    if profundidade == 0 or game_over(board):
         return
 
-    # Dictionary of valid moves
     move = -1
     moves = {
         1: [0, 0], 2: [0, 1], 3: [0, 2],
