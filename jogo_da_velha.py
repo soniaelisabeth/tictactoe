@@ -37,7 +37,7 @@ class JogodaVelha():
         else:
             return False
 
-    def jogada_valida(self,x, y): #analisa para verificar se a jogada é válida
+    def jogada_valida(self,x, y): #verifica se a jogada é válida
         if [x, y] in self.celulas_vazias(self.tabuleiro):
             return True
         else:
